@@ -7,14 +7,20 @@ function debug_print(s)
     }
 }
 
-function get_status(status_list)
+function get_status(panel)
 {
-    var ret = []
-    for(var i = 0; i < status_list.length; ++i){
+    var h3_list = panel.getElementsByTagName("h3");
+    var ts_list = panel.getElementsByClassName("duration");
+    var ret = [];
+
+    if(h3_list.length != ts_list.length){
+	return [];
+    }
+
+    for(var i = 0; i < ts_list.length; ++i){
 	try{
-	    var n = status_list[i];
-	    var text = n.childNodes[4].childNodes[2].nodeValue;
-	    var ts = n.childNodes[5].childNodes[1].childNodes[1].childNodes[0].nodeValue;
+	    var text = h3_list[i].childNodes[1].nodeValue;
+	    var ts = ts_list[i].childNodes[0].nodeValue;
 	
 	    s = ts.replace("\n", "") + text.replace("\n", "");
 	    ret.unshift(s);
@@ -33,7 +39,7 @@ function display(s)
 function main()
 {
     var ss = document.getElementById("my_panel");
-    var ret = get_status(ss.childNodes);
+    var ret = get_status(ss);
     for(var i = 0; i < ret.length; ++i){
 	display(ret[i]);
     }
