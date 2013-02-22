@@ -1,4 +1,6 @@
-var Duck = function(){};
+var Duck = function(){
+    this.func1();
+};
 Duck.prototype = { 
     func1 : function(){
 	print("This is in func1");
@@ -10,5 +12,4 @@ Duck.prototype = {
 }
 
 var overlya = new Duck();
-overlya.func1();
-overlya.func2();
+
