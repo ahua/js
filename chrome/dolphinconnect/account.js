@@ -164,12 +164,7 @@ function dolphin_login(username,password,shade_ctrl,show_error,window)
 	{
 		return;
 	}
-	
-	//tmp_user_name = username;
-	//tmp_password = password;
-	
 	sonar_close();
-	//CommInfo.logining = true;
 	
 	dolphin_login_shade_handler = shade_ctrl;
 	dolphin_login_error_handler = show_error;
@@ -185,100 +180,93 @@ function dolphin_login(username,password,shade_ctrl,show_error,window)
 	CommInfo.email = username;
 	CommInfo.nick_name = username;
 	dolphin_xhr = sendRequest(method,url,headers,body_encode,dolphin_login_result,null,function(){
-		print_msg("timeout");
-		dolphin_login_shade_handler(false);
-		dolphin_login_error_handler('Network error, login failed');
+	    print_msg("timeout");
+	    dolphin_login_shade_handler(false);
+	    dolphin_login_error_handler('Network error, login failed');
 	});
 }
 
 function dolphin_login_cancel()
 {
-	if(dolphin_xhr) {
-		try {
-			dolphin_xhr.abort();		
-		}
-		catch(e) {
-			print_msg(e.message);
-		}
-		dolphin_xhr = null;
+    if(dolphin_xhr) {
+	try {
+	    dolphin_xhr.abort();		
 	}
+	catch(e) {
+	    print_msg(e.message);
+	}
+	dolphin_xhr = null;
+    }
 }
 
-/*
-	Callback of dolphin login.
-	Params:
-		xhr: XMLHttpRequest.
-*/
+
 function dolphin_login_result(xhr)
 {
-	if(xhr.readyState == 4)
-	{
-		if(xhr.status == 200 ) {
-			var resp = null;
-			
-			try {
-				resp = JSON.parse(xhr.responseText);
-			}
-			catch(e) {
-				print_msg(e.message);
-				dolphin_login_shade_handler(false);
-				dolphin_login_error_handler('Network error, login failed!');
-				return;
-			}
-			
-			if(resp.status == 0) 	//connect success
-			{	
-				CommInfo.token = resp.data.token;
-				CommInfo.login_type = 0;
-				CommInfo.is_login = true;
-				CommInfo.login_typeName = 'Dolphin';
-				CommInfo.region_domain = null;
-				CommInfo.region_domain = resp.data.region_domain;
-				CommInfo.push_domain = null;
-				CommInfo.push_domain = resp.data.push_domain;
-				
-				if(dolphin_loginwin != null)
-				{
-					
-					chrome.browserAction.setPopup({popup:'mainPane.html'}); 
-					dolphin_loginwin.close();
-				}	
-				login_init(null, true);
-				
-				track_event({	
-					category:'general',
-					action:'login',
-					label:"Dolphin [success]",
-					value:1
-				});	
-			}
-			else
-			{
-				track_event({
-					category:'general',
-					action:'login',
-					label:"Dolphin [fail]",
-					value:1
-				});	
-				//CommInfo.logining = false;
-				print_msg("Username or password error!");
-				dolphin_login_shade_handler(false);
-				dolphin_login_error_handler('Username or password error!');
-				
-			}		
-		}
-		else {
-			print_msg(xhr.status);
-			dolphin_login_shade_handler(false);
-			dolphin_login_error_handler('Network error, login failed!');
-		}
+    if(xhr.readyState == 4)
+    {
+	if(xhr.status == 200 ) {
+	    var resp = null;
+	    
+	    try {
+		resp = JSON.parse(xhr.responseText);
+	    }
+	    catch(e) {
+		print_msg(e.message);
+		dolphin_login_shade_handler(false);
+		dolphin_login_error_handler('Network error, login failed!');
+		return;
+	    }
+	    
+	    if(resp.status == 0) 	//connect success
+	    {	
+		CommInfo.token = resp.data.token;
+		CommInfo.login_type = 0;
+		CommInfo.is_login = true;
+		CommInfo.login_typeName = 'Dolphin';
+		CommInfo.region_domain = null;
+		CommInfo.region_domain = resp.data.region_domain;
+		CommInfo.push_domain = null;
+		CommInfo.push_domain = resp.data.push_domain;
+		
+		if(dolphin_loginwin != null)
+		{
+		    
+		    chrome.browserAction.setPopup({popup:'mainPane.html'}); 
+		    dolphin_loginwin.close();
+		}	
+		login_init(null, true);
+		
+		track_event({	
+		    category:'general',
+		    action:'login',
+		    label:"Dolphin [success]",
+		    value:1
+		});	
+	    }
+	    else
+	    {
+		track_event({
+		    category:'general',
+		    action:'login',
+		    label:"Dolphin [fail]",
+		    value:1
+		});	
+		//CommInfo.logining = false;
+		print_msg("Username or password error!");
+		dolphin_login_shade_handler(false);
+		dolphin_login_error_handler('Username or password error!');
+		
+	    }		
 	}
+	else {
+	    print_msg(xhr.status);
+	    dolphin_login_shade_handler(false);
+	    dolphin_login_error_handler('Network error, login failed!');
+	}
+    }
 }				
 
-/*
-	User login initialization.This function will clear device list and current open tab list,
-	then validate token.
-*/
+
 function login_init(tabId, first_login)
 {
     if(first_login != null && first_login ==true) 
@@ -298,21 +286,14 @@ function login_init(tabId, first_login)
 	    print_msg(e.message);
 	}
     }
-    
-    //clear bookmark all status.
     BookmarkSyncCtrl.clear();
-    
-    //if there's failed logout info, try again.
     logout_failed_retry();
     
-    //clear push device list.
     CommInfo.device_list.splice(0,CommInfo.device_list.length);
-    //clear cur tab list.
     CommInfo.cur_tab_list.splice(0,CommInfo.cur_tab_list.length);
     
     create_top_menu();
     
-    //save use info to localstorage
     save_user_login_info();
     
     if(CommInfo.user_id) {
@@ -334,174 +315,137 @@ function logout(){
 	dev_id:get_clientid(true)
     };
     
-    //save user info for failed reconnect to logout.
     localStorage['DolphinBrowserLogout'] = JSON.stringify(info);
-	logout_api(info);
-	logout_clear();
+    logout_api(info);
+    logout_clear();
 }
 
 
 
 function logout_api(info)
 {
-	logout_num += 1;
-	var method = "POST";
-	var url = API.logout();
-	var headers={"Content-Type":"application/json"};	
-	var body={'token':info.token, "device_id":info.dev_id, "self_logout":1};
-	var body_encode=urlencode(body);
-	var callback = logout_callback;
-	sendRequest(method, url, headers, body_encode, callback);
+    logout_num += 1;
+    var method = "POST";
+    var url = API.logout();
+    var headers={"Content-Type":"application/json"};	
+    var body={'token':info.token, "device_id":info.dev_id, "self_logout":1};
+    var body_encode=urlencode(body);
+    var callback = logout_callback;
+    sendRequest(method, url, headers, body_encode, callback);
 }
 
 function logout_callback(xhr)
 {
-	if(xhr.readyState == 4)
+    if(xhr.readyState == 4)
+    {
+	if(xhr.status == 200) 
 	{
-		if(xhr.status == 200) 
-		{
-			logout_num = 0;
-			var resp = JSON.parse(xhr.responseText);
-			if(resp.status == 0)
-			{
-				//logout_clear();
-				//delete localStorage['DolphinBrowserLogout'];
-				print_msg("logout success.");
-			}
-			else
-			{
-				//if server failed, not retry.
-				print_msg("logout failed.");
-				//delete localStorage['DolphinBrowserLogout'];
-			}
-			delete localStorage['DolphinBrowserLogout'];
-		}
-		else {
-			if(logout_num < 10) {
-				setTimeout(logout_failed_retry, logout_num*1000);
-			}
-			//if failed, try again.
-			//logout_failed_retry();
-		}
+	    logout_num = 0;
+	    var resp = JSON.parse(xhr.responseText);
+	    if(resp.status == 0)
+	    {
+		print_msg("logout success.");
+	    }
+	    else
+	    {
+		print_msg("logout failed.");
+	    }
+	    delete localStorage['DolphinBrowserLogout'];
 	}
+	else {
+	    if(logout_num < 10) {
+		setTimeout(logout_failed_retry, logout_num*1000);
+	    }
+	}
+    }
 }
 
 function logout_failed_retry() {
-	var info = localStorage['DolphinBrowserLogout'];
-	if (info != null && info!= '') {
-		var info_json = JSON.parse(info);
-		logout_api(info_json);
-	}	
+    var info = localStorage['DolphinBrowserLogout'];
+    if (info != null && info!= '') {
+	var info_json = JSON.parse(info);
+	logout_api(info_json);
+    }	
 }
 
-/*
-	Clear user information.
-*/
+
 function logout_clear()
 {	
-	push_close();
-	tabs_sync_clear();
-	BookmarkSyncCtrl.clear();
-	
-	if(CommInfo.popup_id != null) {
-		try{
-			CommInfo.popup_id.close();		
-		}
-		catch(e) {
-			print_msg('close popup error');		
-		}
-		CommInfo.popup_id = null;
+    push_close();
+    tabs_sync_clear();
+    BookmarkSyncCtrl.clear();
+    
+    if(CommInfo.popup_id != null) {
+	try{
+	    CommInfo.popup_id.close();		
 	}
-	
-	CommInfo.is_login=false;
-	chrome.browserAction.setPopup({popup:'index.html'}); 
-	CommInfo.device_list = [];
-	removeall_menu();
-	CommInfo.logining = false;
-	CommInfo.sync_first = true;
-	//CommInfo.region_domain = null;
-	//CommInfo.push_domain = null;
-	close_setting_page();	
-	
+	catch(e) {
+	    print_msg('close popup error');		
+	}
+	CommInfo.popup_id = null;
+    }
+    
+    CommInfo.is_login=false;
+    chrome.browserAction.setPopup({popup:'index.html'}); 
+    CommInfo.device_list = [];
+    removeall_menu();
+    CommInfo.logining = false;
+    CommInfo.sync_first = true;
+    close_setting_page();	
+    
     setTimeout(
     	function(){
-		    delete localStorage['DolphinBrowserUserLoginInfo'];
-		    delete localStorage['DolphinBrowserAfterSid'];
-		    delete localStorage['DolphinBrowserAccountChange'];
-		    delete localStorage['DolphinBrowserSyncTabs'];
-		    delete localStorage['DolphinBrowserBookmark'];
-		    delete localStorage['DolphinBrowserTabSyncId'];
-		    delete localStorage['DolphinBrowserDevName'];
-		    delete localStorage['DolphinBrowserPushShortcuts'];
-		    delete localStorage['DolphinBrowserSetting'];
+	    delete localStorage['DolphinBrowserUserLoginInfo'];
+	    delete localStorage['DolphinBrowserAfterSid'];
+	    delete localStorage['DolphinBrowserAccountChange'];
+	    delete localStorage['DolphinBrowserSyncTabs'];
+	    delete localStorage['DolphinBrowserBookmark'];
+	    delete localStorage['DolphinBrowserTabSyncId'];
+	    delete localStorage['DolphinBrowserDevName'];
+	    delete localStorage['DolphinBrowserPushShortcuts'];
+	    delete localStorage['DolphinBrowserSetting'];
     	},
     	500
     );
 }
 
-/*
-	Open UserInfo Page
-*/
 function open_userinfo_page()
 {
-	chrome.tabs.query({url:chrome.extension.getURL('info.html')}, function(tabs){
-		var len = tabs.length;
-		
-		//if setting page exists,then focus this page to user.
-		if(len > 0)
-		{
-			chrome.tabs.update(tabs[0].id, {active:true});
-		}
-		else
-		{
-			chrome.tabs.create({url:'info.html'});
-		}	
-	});
-}
-
-/*
-	Refresh UserInfo Page
-*/
-function refresh_userinfo_page() {
-	if(CommInfo.infoPage_id != null) {
-		CommInfo.infoPage_id.shortCutInit();
+    chrome.tabs.query({url:chrome.extension.getURL('info.html')}, function(tabs){
+	var len = tabs.length;
+	
+	if(len > 0)
+	{
+	    chrome.tabs.update(tabs[0].id, {active:true});
 	}
+	else
+	{
+	    chrome.tabs.create({url:'info.html'});
+	}	
+    });
 }
 
-/*
-	When use logout, all setting page of this extension should close together.
-*/
+
+function refresh_userinfo_page() {
+    if(CommInfo.infoPage_id != null) {
+	CommInfo.infoPage_id.shortCutInit();
+    }
+}
+
 function close_setting_page()
 {
-	chrome.tabs.query({url:chrome.extension.getURL('info.html')}, function(tabs){
-		if(tabs != null) {
-			for(var tab in tabs)
-			{
-				chrome.tabs.remove(tabs[tab].id);
-				print_msg("remove info.html"+tabs[tab].id);
-			}
-		}	
-	});
+    chrome.tabs.query({url:chrome.extension.getURL('info.html')}, function(tabs){
+	if(tabs != null) {
+	    for(var tab in tabs)
+	    {
+		chrome.tabs.remove(tabs[tab].id);
+		print_msg("remove info.html"+tabs[tab].id);
+	    }
+	}	
+    });
 }
 
-/*
-	Save push tabs to local storage
-	Params:
-		tabs: tabs to be saved
-*/
 
-
-/*
-	Save user login info to local storage.
-	Storage structure:
-		{
-			"token":"f96b10ecea434292a59fc354777aaf06",
-			"user_name":"raytest@gmail.com",
-			"nick_name":"raytest",
-			"login_type":"10",
-			"login_typeName":"Google"
-		}
-*/
 function save_user_login_info()
 {
 	var info = {
@@ -518,46 +462,40 @@ function save_user_login_info()
 	localStorage['DolphinBrowserUserLoginInfo'] = JSON.stringify(info);
 }
 
-/*
-	Check user last login status.
-*/
+
 function check_login_status(){
-	//if not login, then check login save info
-	if(!CommInfo.is_login)
+    if(!CommInfo.is_login)
+    {
+	var user_login_info = localStorage['DolphinBrowserUserLoginInfo'];
+	if(user_login_info != null && user_login_info != '')
 	{
-		var user_login_info = localStorage['DolphinBrowserUserLoginInfo'];
-		if(user_login_info != null && user_login_info != '')
-		{
-			var login_info = JSON.parse(user_login_info);
-			check_last_login(login_info);
-			login_init();
-			chrome.browserAction.setPopup({popup:'mainPane.html'}) 
-		}
+	    var login_info = JSON.parse(user_login_info);
+	    check_last_login(login_info);
+	    login_init();
+	    chrome.browserAction.setPopup({popup:'mainPane.html'}) 
 	}
+    }
 }
 
-/*
-	Restore user last saved info.
-	Params:
-		login_info: json dict type.
-*/	
+
 function check_last_login(login_info)
 {
-	//CommInfo.user_id = login_info.user_id;
-	CommInfo.user_name = login_info.user_name;
-	CommInfo.nick_name = login_info.nick_name;
-	CommInfo.email = login_info.email;
-	CommInfo.token = login_info.token;
-	CommInfo.login_type = login_info.login_type;
-	CommInfo.login_typeName = login_info.login_typeName;
-	CommInfo.is_login = true;
-	CommInfo.sync_first  =true;	
-	CommInfo.region_domain = login_info.region_domain;
-	CommInfo.push_domain = login_info.push_domain;
-	CommInfo.user_id = login_info.user_id;
+    CommInfo.user_name = login_info.user_name;
+    CommInfo.nick_name = login_info.nick_name;
+    CommInfo.email = login_info.email;
+    CommInfo.token = login_info.token;
+    CommInfo.login_type = login_info.login_type;
+    CommInfo.login_typeName = login_info.login_typeName;
+    CommInfo.is_login = true;
+    CommInfo.sync_first  =true;	
+    CommInfo.region_domain = login_info.region_domain;
+    CommInfo.push_domain = login_info.push_domain;
+    CommInfo.user_id = login_info.user_id;
 }
+
 
 chrome.browserAction.onClicked.addListener(function(tab) {
 	CommInfo.lastTabId = tab.id; 
 	focusWindow(CommInfo.login_win_id);
 });	
+
