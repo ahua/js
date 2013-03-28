@@ -1,0 +1,122 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Dolphin Connect Info</title>
+	<style>
+		body{padding:0;margin: 0;background:#EBEBEB;font-size:18px;font-family: Helvetica Neue,Segoe UI, Arial, sans-serif;-webkit-font-smoothing:antialiased;}
+		a{cursor:pointer;text-decoration:none;}
+		.blackCover{display:none;position:absolute;top:0;left:0;width:100%;height:100%;background-color:#000;opacity:0.5;z-index:100}
+		.confirmBox{display:none;position:absolute;left:50%;top:50%;width: 402px;height: 275px;margin:-137px 0 0 -201px;color:#808080;font-size: 22px;line-height:102px;text-align:center;border:1px solid #fff;border-radius:5px;box-shadow:0 5px 15px #333;background: #f2f2f2;z-index:101;}
+			.comfirmBoxTitle{display:block;border-bottom: 3px solid #379C00;text-align:left;padding:20px;font: bold 24px Droid Sans Fallback;}
+			.comfirmBtn{display:inline-block;width: 175px;font-size:24px;line-height:59px;border: 1px solid #bbb;text-align:center;border-radius: 9px;color:#494949;background:-moz-linear-gradient(top, #f1f1f1, #cfcfcf);background:-webkit-gradient(linear,left top,left bottom,from(#f1f1f1),to(#cfcfcf));box-shadow: 1px 1px 1px #DDD;margin: 0 5px;}
+			.comfirmBtn:hover{border: 1px solid #9EC688;background: #379C00;color: #FFF;}
+		.setPage{}
+			.topArea{height:90px;border-top: 3px solid #379C00;border-bottom:1px solid #ccc;background-color:#f4f4f4;}
+				.setLogo{width: 914px;height: 49px;margin: 25px auto 0;padding-left: 61px;font-size:22px;line-height:56px;background: url(images/logo48.png) no-repeat;color: #7dbb14;}
+			.mainArea{width:875px;min-height:640px;margin:15px auto 0;padding: 33px 49px 0;border:1px solid #dadada;background-color:#f5f5f5;}
+				.formTitle{height:28px;color:#5c5c5c;border-bottom:1px solid #dcdcdc;}
+					.setHelp{color:#379c00;float:right}
+				.formBody{display:-webkit-box;display:-moz-box;overflow-x:hidden;padding-top:28px}
+					.formBox{position:relative;margin-top:10px;margin-bottom:15px;padding:11px 18px;border:1px solid #dadada;border-radius:5px;background-color:#fff;}
+					.leftSide{width:340px;min-height:543px;margin-right:60px;}
+					.devideLine{height:1px;background-color:#dadada;margin:15px 0}
+						/*sync*/
+						.formCheck{display:inline-block;float:right;width: 20px;height: 20px;background: url(images/info.png) no-repeat -45px 0px;cursor:pointer;}
+							.checked{background-position:0 0;}
+							.formCheck input{visibility: hidden;}
+							.checkDevi{width:340px;margin-left:-20px}/*sync use*/
+						.checkItem{color:#6f6f6f}
+						/*dolphinbtn*/
+						.dolphinBtn{margin-bottom:10px;line-height:15px;color:#6f6f6f}
+						.dolphinBtnText{display:block;font-size:16px;color:#b9b9b9}
+						/*account*/
+						.accountInfo{display:block;margin-bottom: -2px;color:#6f6f6f;max-width:225px;white-space: nowrap;overflow: hidden;text-overflow:ellipsis}
+						.accountKind{display:block;font-size:16px;color:#b9b9b9;margin-top:2px;}
+						.loginOut{position:absolute;display:block;color:#379c00;top:20px;right:27px;}
+						.gotoAdvance{float:right;color:#379c01;font-size:16px;word-spacing: 2px;letter-spacing: 1px;text-decoration: underline;}
+					.rightSide{width:475px;min-height:500px;}	
+						/*pcName*/
+						@-moz-document url-prefix(){.shortcutBox{width:426px;} .pcNameBox{width:415px;}}   /*ff hack*/
+						.pcNameBox{height:46px;padding:0 20px;overflow:hidden}
+							.reName{border-color:#379c00}
+						.pcName{border:none;font-size:18px;color:#6f6f6f;width:100%;height:100%;white-space: nowrap;overflow: hidden;text-overflow:ellipsis}
+						/*shortCut*/
+						.shortcutBox{max-height:245px;overflow:auto;margin-bottom:20px;}
+						.shortTit{margin-top:25px;}
+						.helpInfo{color:#6f6f6f}
+						.noDevice{color:#6f6f6f;}
+						.shortCutItem{position:relative;padding-left:60px;height:69px;line-height:69px;border-bottom:1px solid #dadada;background:url(images/info.png) no-repeat;}
+						.shortCutItem:last-child{border-color:#fff;}
+							.pc{background-position:-337px -250px;}
+							.phone{background-position:-337px -322px;}
+							.pad{background-position:-333px -186px}
+							.deviceName{display:inline-block;max-width:110px;color:#6f6f6f;white-space: nowrap;overflow: hidden;text-overflow:ellipsis}
+							.shortCutKeys{display:inline-block;float:right;height:38px;width:205px;margin:16px 30px 0 0;padding-left:15px;color:#6f6f6f;line-height:38px;border-radius:5px;border:1px solid #ccc;box-shadow:0 0 2px #ccc inset;white-space: nowrap;overflow: hidden;text-overflow:ellipsis;cursor:pointer;}
+							.inputState .shortCutKeys{border-color:#379c00}
+							.deleBtn{display:block;position:absolute;width:36px;height:36px;right:32px;top: 18px;border-left: 1px solid #EDEDED;cursor:pointer;background:url(images/info.png) no-repeat -12px -260px #fff;}
+							.deleBtn:hover{background-position:-12px -304px;}
+							.inputState .deleBtn{display:none}
+					.boxTitle{display:block;padding-left:20px;font:18px Helvetica Neue Medium,Segoe UI Semibold,Arial, sans-serif;color:#5c5c5c}
+			.bottomArea{width: 970px;margin:0 auto;color: #454545;overflow: hidden;background: url(images/info.png) no-repeat 0px -70px;padding-top: 25px;text-align: center;}
+				.bottomArea a{border-left: 1px solid #ABABAB;color: #454545;padding:0 15px;text-decoration: none;font-size: 14px;}
+				.bottomArea a:first-child{border-left:none;}
+				.bottomArea span{border-left: 1px solid #ABABAB;color: #454545;padding:0 15px;text-decoration: none;font-size: 14px;}
+		/*--------------------scroll style--------------------------------*/
+					::-webkit-scrollbar{width: 6px;height: 6px;}
+					::-webkit-scrollbar-track-piece{background-color: #DDDDDD;-webkit-border-radius: 6px;border:1px solid #C0C0C0;}
+					::-webkit-scrollbar-thumb:vertical{height: 4px;background-color: #FFFFFF;-webkit-border-radius: 6px;border:1px solid #C0C0C0;}
+					::-webkit-scrollbar-thumb:horizontal{width: 4px;background-color: #FFFFFF;-webkit-border-radius: 6px;}
+					:focus {outline: 0;}
+	</style>
+</head>
+<body id="set">
+	<div class="setPage" id="setOuter">
+		<header class="topArea">
+			<div class="setLogo">Dolphin Connect</div>
+		</header>
+		<div class="mainArea">
+			<header class="formTitle"><span id="nickName">Ray</span> <a class="setHelp" href="http://www.dolphin-browser.com/help/extension.html" target="_blank">Help</a></header>
+			<div class="formBody" >
+				<div class="leftSide">
+					<span class="boxTitle">Account</span>
+					<div class="formBox">
+						<span class="accountInfo" id="userName">ytian@gmail.com</span>
+						<span class="accountKind">Connected to <span id="accountKind">Google</span></span>
+						<a class="loginOut" id="logout">Log Out</a>
+					</div>
+					<span class="boxTitle">Sync Type</span>
+					<div class="formBox">
+						<div class="checkItem">Bookmarks<span class="formCheck" ><input type="checkbox" id="bookmark" /></span></div>
+						<div class="devideLine checkDevi"></div>
+						<div class="checkItem">Open Tabs<span class="formCheck"><input type="checkbox" id="tab" /></span></div>
+					</div>
+					<span class="boxTitle">Dolphin Button</span>
+					<div class="formBox ">
+						<div class="dolphinBtn">Show Dolphin Button<span class="formCheck"><input type="checkbox" id="dolphinBtn" /></span></div>
+						<span class="dolphinBtnText">Show “<img src="images/dolphinBtn.jpg"/>” on map and other sites to make it easier to send to mobile Dolphin rapidly</span>
+					</div>
+				</div>
+				<div class="rightSide">
+					<span class="boxTitle">Computer Name</span>
+					<div class="formBox pcNameBox"><input type="text" value="my Pc" class="pcName" id="pcName"/></div>
+					<span class="boxTitle shortTit">Shortcut</span>
+					<div class="formBox shortcutBox" id="shortCutHolder">
+						<div class="noDevice">No devices connected!</div>
+						<!--<span class="helpInfo">Click the box below to edit your shortcut</span>
+						<div class="shortCutItem pc"><span class="deviceName">iPone is my my ymsdfsdfjsdldjfdslf</span><span class="shortCutKeys" id="device1">dfdasdlkfsdflsldjfsjfdljfsldfsldkfj</span><span class="deleBtn"></span></div>
+						<div class="shortCutItem pad"><span class="deviceName">iPone is my my ymsdfsdfjsdldjfdslf</span><span class="shortCutKeys" id="device2"></span><span class="deleBtn"></span></div>
+						<div class="shortCutItem phone"><span class="deviceName">iPone is my my ymsdfsdfjsdldjfdslf</span><span class="shortCutKeys" id="device3">dfdasdlkfsdflsldjfsjfdljfsldfsldkfj</span><span class="deleBtn"></span> </div>-->
+						
+					</div>
+					<a class="gotoAdvance" id="gotoAdvance">Advanced Setting Via Web Management</a>
+				</div>
+			</div>
+		</div>
+		<footer class="bottomArea"><a href="http://dolphin-browser.com/terms/" target="_blank">Terms of Service</a><a href="http://dolphin-browser.com/privacy/" target="_blank">Privacy Policy</a><span>&copy;2012 MoboTap Inc.</span></footer>
+	</div>
+	<div class="blackCover" id="showCover"></div>
+	<div class="confirmBox" id="showConfirm"><span class="comfirmBoxTitle">Confirm</span>Are you sure you want to log out?<a class="comfirmBtn" id="cancle">Cancel</a><a class="comfirmBtn" id="yes">Yes</a></div>
+	<script src="js/index.js"></script>
+</body>
+</html>

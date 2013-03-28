@@ -1,0 +1,73 @@
+{
+    "name": "Dolphin Connect",
+    "version": "1.3",
+    "description": "With Dolphin Sync, you can sync all your tabs, send webpages directly to certain devices across platforms.",
+    "minimum_chrome_version": "17",
+    "permissions": ["tabs","chrome://favicon/*", "<all_urls>", "contextMenus","notifications","geolocation","unlimitedStorage"],
+    "content_security_policy": "script-src 'self' https://ssl.google-analytics.com; object-src 'self'",
+    "content_scripts" : [
+        {
+            "matches" : [	
+                         "https://maps.google.cn/*"
+			],
+            "js" : ["cs_google_map.js"]
+        },
+        {
+            "matches" : [ 
+			"http://ditu.baidu.cn/*"
+			],
+            "js" : ["cs_baidu_map.js"]
+        },
+        {
+            "matches" : ["http://*/*","https://*/*"],
+            "js": ["cs_shortcut.js"]
+        }
+    ],
+    "background" : {
+        "scripts": [
+        	"org/cometd.js",
+			"org/cometd/AckExtension.js",
+			"org/cometd/ReloadExtension.js",
+			"jquery/jquery-1.7.2.js",
+			"jquery/json2.js",
+			"jquery/jquery.cookie.js",
+			"jquery/jquery.cometd.js",
+			"jquery/jquery.cometd-reload.js",
+			"jquery/jquery.base64.min.js",
+			"common.js",
+			"utils.js",
+			"menu.js",
+			"account.js",
+			"api.js",
+			"bookmark/struct.js",
+            "bookmark/storage.js",
+            "bookmark/api2.js",
+            "bookmark/merge.js",
+            "bookmark/control.js",
+            "bookmark/monitor.js",
+            "tabsync.js",
+			"sonnar.js",
+			"push_top.js",
+			"push.js"
+		]
+    },
+    "icons":{
+        "16": "images/logo16.png",
+        "48": "images/logo48.png",
+        "128": "images/logo128.png"
+     },
+    "browser_action":{
+        "default_title":"Dolphin Connect",
+        "default_icon": "images/normal.png",
+        "default_popup":"index.html"
+    },
+	"web_accessible_resources": [
+      "images/normal.png",
+      "images/ico.png",
+      "jquery/jquery-1.7.2.js",
+      "ba.js",
+	  "images/logo16.png",
+	  "images/sentBtn.png"
+    ],
+    "manifest_version": 2
+}

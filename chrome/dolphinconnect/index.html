@@ -1,0 +1,83 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Dolphin Connect</title>
+	<style>
+		/* .loginPage *{border:1px solid #ddd;border-right:none;border-left:none} */
+		body{margin:0;padding:0;overflow:hidden;font:16px Helvetica Neue,Segoe UI, Arial, sans-serif;-webkit-font-smoothing:antialiased;}
+		a{cursor:pointer;text-decoration:none;}
+		.loginPage{width: 748px;height: 359px;}
+			.leftSide{float:left;width: 50%;height: 100%;position:relative;/*firefox*/background: url("images/Sprite.png") no-repeat scroll 54px 48px,-moz-linear-gradient(top, #F5FFEB, #FFF);/*chrome safari*/background: url(images/Sprite.png) no-repeat 54px 48px,-webkit-gradient(linear, 0 0, 0 bottom, from(#F5FFEB), to(#FFF))}
+				.leftInstro{display:block;margin: 260px 50px 0;color:#808171;}
+				.leftInstro b{font-weight:600;}
+				.middleLine{position:absolute;width:1px;height:100%;right:0px;top:0px;background-color:#ccc}
+			.rightSide{float:right;width: 50%;height: 100%;position:relative;overflow:hidden}
+				.topArea{position:relative;height: 61px;background: url(images/Sprite.png) no-repeat 40px -329px;margin: 0px 15px;border-bottom: 1px solid #e5e5e5;}
+				.switchArea{height: 302px;}
+					.back{display: none;position: absolute;height: 20px;top: 320px;left: 34px;background: url(images/Sprite.png) no-repeat -28px -502px;padding-left: 25px;color:#808080;line-height: 19px;}
+						.showBack .back{display:block;}
+					.help{display:block;position: absolute;width: 20px;height: 20px;top: 320px;right: 34px;background: url(images/sync.png) no-repeat -10px -578px;} 
+					.mainPage{width: 300px;margin: 18px 0px 0 35px;}
+						/*1*/
+						.loginBtn{display:block;padding-left:20px;margin-bottom: 10px;height:53px;border:1px solid #d0d0d0;line-height:53px;font-size:17px;color:#000;box-shadow: -1px -1px 1px white inset,1px 1px 2px #cbcbcb;border-radius: 5px;/*firefox*/background:-moz-linear-gradient(top, #FAFAFA, #E6E6E6);/*chrome safari*/background: -webkit-gradient(linear, 0 0, 0 bottom, from(#FAFAFA), to(#E6E6E6));}
+							.loginBtn>b{color:#404040;}
+						.faceBook{display:block;margin-bottom: 24px;height:62px;border:1px solid #ccc;line-height:62px;font-size:17px;color:white;padding-left:74px;box-shadow: 0px 0px 1px #ccc inset,1px 1px 2px #2c55aa;border-radius: 5px;/*firefox*/background: url(images/Sprite.png) -431px -488px no-repeat,-moz-linear-gradient(top, #6796f1, #4471c7);/*chrome safari*/background: url(images/Sprite.png) -431px -488px no-repeat,-webkit-gradient(linear, 0 0, 0 bottom, from(#6796f1), to(#4471c7));}
+						/*2*/
+						.networkErr{margin: 83px 16px 0;background:url("images/Sprite.png") no-repeat scroll -336px -446px;}
+							.errorInf{display:block;position: relative;top: 47px;font-size:15px;color:#ff5a00;text-align:center}
+						/*4*/
+						.dolphinAccount{position:relative}
+							[error='email'] .Email,[error='password'] .Password,[error='passworderror'] .wrongPw{display:block;}
+							.daLoginTit{display:block;margin:30px 0 15px 6px;color:#696a69;font-weight: bold;font-size: 18px;}
+							.accountInput{display:block;width:266px;height:30px;margin:0 auto 16px;padding: 5px 8px;font-size: 16px;line-height: 24px;color:#1c1c1c;border: 2px solid #C2C2C2;border-radius: 8px;box-shadow: 1px 1px 2px #E4E4E4 inset;}
+							.focus{border: 2px solid #379c00}
+							.accountLoginBtn{display:block;height: 33px;width: 77px;margin:9px 8px 0 0;line-height: 29px;color:#fff;text-align: center;float:right;border: 1px solid #53BC1B;border-radius: 5px;box-shadow: 0px 0px 0px #6CDA30 inset,1px 1px 2px #B5C7AB;background:-moz-linear-gradient(top, #4AD001, #38A000);background: -webkit-gradient(linear, 0 0, 0 bottom, from(#4AD001), to(#38A000));}
+							.wrongPw{color:#ff5a00;font-style:italic;margin-top: -14px;display: block;display:none}
+							.wrongInfoStyle{display:none;position:absolute;width:166px;height:86px;font-size: 13px;line-height:135px;color:#797a79;text-align:center;background:url("images/Sprite.png") no-repeat scroll 0px -824px,url("images/Sprite.png") no-repeat scroll -329px -788px;}
+							.Email{top: 38px;right: 13px;}
+							.Password{top:98px;right:13px;}
+					.aLoading{display:none;position:absolute;bottom:0px;left:0px;height:302px;width:374px;background:#fff;z-index:100}
+						.aLoading .gif{display:block;width:50px;height:50px;margin:124px auto 0;background:url("images/Sprite.png") no-repeat scroll -25px -763px;border:none;-webkit-animation: x-spin 2s infinite linear;-moz-animation: x-sp 2s infinite linear;}
+					/*chrome*/
+					/*--------------------scroll style--------------------------------*/
+					::-webkit-scrollbar{width: 6px;height: 6px;}
+					::-webkit-scrollbar-track-piece{background-color: #DDDDDD;-webkit-border-radius: 6px;border:1px solid #C0C0C0;}
+					::-webkit-scrollbar-thumb:vertical{height: 4px;background-color: #FFFFFF;-webkit-border-radius: 6px;border:1px solid #C0C0C0;}
+					::-webkit-scrollbar-thumb:horizontal{width: 4px;background-color: #FFFFFF;-webkit-border-radius: 6px;}
+					:focus {outline: 0;}
+					/*动画*/
+					@-webkit-keyframes x-spin { 
+						0% { -webkit-transform: rotate(0deg);} 
+						100% { -webkit-transform: rotate(-360deg);-moz-transform: rotate(-360deg); } 
+					}
+					@-moz-keyframes x-sp{
+					0% { -moz-transform: rotate(0deg);} 
+					100% { -moz-transform: rotate(-360deg);}
+					}
+					/*input placeHolder*/
+					::-webkit-input-placeholder { font-style:Italic; }
+					input:-moz-placeholder { font-style:Italic; }
+	</style>
+</head>
+<body id="login">
+	<div class="loginPage">
+		<div class="leftSide"><span class="leftInstro">Sync all your tabs and bookmarks, push webpages and other information to mobile devices.<div class="middleLine"></div></div>
+		<div class="rightSide">
+			<header class="topArea" id="nav">
+			</header>
+			<section class="switchArea" id="mainAreaOut">
+				<a class="help" href="http://www.dolphin-browser.com/help/extension.html" target="_blank" id="helpBtn"></a>
+				<a class="back" href="#"  id="backBtn">Back</a>
+				<div class="aLoading" id="loadCover"><span class="gif"></span></div>
+				<div class="mainPage" id="pageHolder"> <!--动态-->
+					<a class="faceBook" id="facebook">Connect with <b>Facebook</b></a>
+					<a class="loginBtn" id="google">Connect with <b>Google Account</b></a>
+					<a class="loginBtn" id="dolphinLogin">Connect with <b>Dolphin Account</b></a>
+				</div>
+			</section>		
+		</div>
+	</div>
+</body>
+<script src="js/index.js"></script>
+</html>
