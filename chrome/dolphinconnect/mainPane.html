@@ -3,92 +3,22 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Dolphin Sync</title>
-	<style>
-		body{margin:0;padding:0;overflow:hidden;font:14px Helvetica,Segoe UI, Arial, sans-serif;-webkit-font-smoothing:antialiased;-webkit-font-smoothing:antialiased;}
-		a{cursor:pointer;text-decoration:none;}
-		.disabled{color:#ccc !important;}
-		.noBorder{border:none !important;}
-		.mainPage{width:350px;overflow-x:hidden;}
-			.topArea{height:54px;background-color:#f5f5f5;border-bottom: 1px solid silver;}
-				.dolphinLogo{display:inline-block;width: 124px;height: 24px;float: left;margin: 13px 0 0 15px;background: url("images/sync.png") no-repeat scroll 0 0}
-				.userInfo{display: inline-block;float: right;width:24px;height:20px;margin: 12px 26px 0 0;background: url("images/sync.png") no-repeat right -75px;}
-				.userInfo:hover{background-position:right -102px;}.userInfo:active{background-position:right -75px;}
-				.noNet .userInfo{display:none;}
-			.mainArea{min-height:30px}
-				/*设备列表*/
-				.deviceList{max-height: 250px;overflow:hidden;}
-					.deviceItem{border-top:1px solid transparent;border-bottom:1px solid transparent;margin-bottom:-2px;}
-					.deviceItem:hover{border-color:#dfdfdf;background-color:#fafafa} .deviceItem:active{border-color:#dfdfdf;background-color:#ededed}
-					.deviceItemInner{display:block;margin:0 25px;height:49px;line-height:49px;border-bottom:1px solid #ebebeb;background:url(images/sync.png) no-repeat 0 0;}
-					.deviceItemInner:hover{border-color:transparent} .deviceItemInner:active{border-color:transparent}
-						.pc{background-position:-10px -130px}
-						.phone{background-position:-5px -759px}
-						.pad{background-position:-152px -194px}
-						.deviceName{display:inline-block;padding-left:45px;font-family:Helvetica Neue Medium,Segoe UI Semibold,Arial, sans-serif;color:#5c5c5c;white-space: nowrap;overflow: hidden;text-overflow:ellipsis}
-						.deviceShorcut{display:inline-block;color:#6f6f6f;float:right;text-align:right;white-space: nowrap;overflow: hidden;text-overflow:ellipsis}
-				/*sync列表*/
-				.syncList{max-height: 218px;overflow-y: auto;}
-					.syncListItem{margin:0 21px}
-					.syncListItem:first-child{margin-top:19px;}
-						.itemTitle{display:block;padding-left:25px;line-height:16px;color:#5c5c5c;font-family:Helvetica Neue Medium,Segoe UI Semibold,Arial, sans-serif;margin-bottom:11px;background:url(images/sync.png) no-repeat 0 -468px;cursor:pointer;}
-						.itemHolder{display:none;margin:0 0 0 35px;overflow-y:auto;}
-						.open .itemTitle{background-position:-4px -503px;}
-						.open .itemHolder{display:block;}
-						.itemLink{display:block;margin-bottom:11px;height:16px;line-height:16px;white-space: nowrap;overflow: hidden;text-overflow:ellipsis;color:#5c5c5c !important}
-						.itemLink img{width:15px;margin:1px 6px 0 0;float:left;}
-				/*出错样式*/
-				.syncOops{display: block;height: 118px;width: 282px;margin: 36px 48px 0px;color: #5c5c5c;}
-				.syncOops>p{text-align: center;font-size: 16px;margin:15px 0}
-				.syncOops>a{text-decoration: underline;color: #005EDE;}
-				.someError{height:81px;display:-moz-box;display:-webkit-box;overflow:hidden;}
-				.downNewerDolphin img{margin:10px 15px;width:62px;height:62px;}
-				.downNewerDolphin span{display: inline-block;float:right;height: 59px;width: 249px;margin: 15px 0 0;color:#6f6f6f}
-				.syncNoDevice>span{display: block;height: 29px;width: 249px;margin: 26px 0px 0px 74px;color:#6f6f6f}
-				.pushEmpty >span{display: block;height: 46px;width: 189px;margin: 17px 0px 0px 81px;line-height: 41px;padding-left: 50px;font-size:15px;color:#6f6f6f}
-				.pushEmpty >span>span{position: absolute;height: 34px;width: 69px;background: url(images/Sprite.png) no-repeat scroll -7px -621px;margin:4px 0 0 -80px;}
-			/*no network*/
-				.noNet #pageHolder{background: url(images/sync.png) no-repeat 0px -825px;height: 81px;margin-left: 59px;padding-left: 45px;}
-					 .noNet #pageHolder span{margin-top: 24px;display: inline-block;color:#ff5a00;}
-					 .noNet #pageHolder span p{margin:0;}
-			.bottomArea{height:49px;background-color:#f5f5f5;border-top:1px solid silver;}
-				.buttonType{display:inline-block;height:23px;padding:0 15px;border:1px solid #ccc;border-radius:12px;color:#6f6f6f;text-align:center;line-height:23px;}
-				.back{margin:13px 15px 0;}
-				.viewOther{margin:13px 14px 0;}
-				.viewOther:active,.back:active{background-color:#ededed}
-				.noNet .helpBtn,.noNet .back,.noNet .viewOther,[type="showDevice"] .back,[type="showSync"] .viewOther{display:none;}
-				.helpBtn{position:absolute;bottom:13px;right:13px;display:block;width:20px;height:20px;background:url(images/help.png) no-repeat;}
-				/*加载*/
-				.loadDevice{overflow:hidden}
-				.loadDevice>span{display: block;height: 49px;width:48px;margin: 21px auto;background: url(images/Sprite.png) no-repeat -26px -764px;-webkit-animation: x-spin 2s infinite linear;-moz-animation: x-sp 2s infinite linear;}
-				::-webkit-scrollbar{width: 6px;height: 6px;}
-				::-webkit-scrollbar-track-piece{background-color: #DDDDDD;-webkit-border-radius: 6px;border:1px solid #C0C0C0;}
-				::-webkit-scrollbar-thumb:vertical{height: 4px;background-color: #FFFFFF;-webkit-border-radius: 6px;border:1px solid #C0C0C0;}
-				::-webkit-scrollbar-thumb:horizontal{width: 4px;background-color: #FFFFFF;-webkit-border-radius: 6px;}
-				:focus {outline: 0;}
-				@-webkit-keyframes x-spin { 
-						0% { -webkit-transform: rotate(0deg);} 
-						100% { -webkit-transform: rotate(-360deg);-moz-transform: rotate(-360deg); } 
-				}
-				@-moz-keyframes x-sp{
-				0% { -moz-transform: rotate(0deg);} 
-				100% { -moz-transform: rotate(-360deg);}
-				}
-	</style>
+    <link rel="stylesheet" type="text/css" href="css/pane.css" />
 </head>
 <body id="mainPane">
-	<div class="mainPage" id="mainPaneOuter" type="showDevice">
-		<header class="topArea">
-			<a class="dolphinLogo" href="http://www.dolphin-browser.com" target="_blank"></a> <a class="userInfo" id="showUserInfo"></a>
-		</header>
-		<div class="mainArea">
-			<div id="pageHolder" class="deviceList"></div>
-		</div>
-		<footer class="bottomArea">
-			<a class="buttonType back" id="back">Back</a>
-			<a class="buttonType viewOther disabled" id ="viewOther">View other tabs in cloud…</a>
-			<a class="helpBtn" href="http://www.dolphin-browser.com/help/extension.html" target='_blank'></a>
-		</footer>
-	</div>
+  <div class="mainPage" id="mainPaneOuter" type="showDevice">
+    <header class="topArea">
+      <a class="dolphinLogo" href="http://www.dolphin-browser.com" target="_blank"></a> <a class="userInfo" id="showUserInfo"></a>
+    </header>
+    <div class="mainArea">
+      <div id="pageHolder" class="deviceList"></div>
+    </div>
+    <footer class="bottomArea">
+      <a class="buttonType back" id="back">Back</a>
+      <a class="buttonType viewOther disabled" id ="viewOther">View other tabs in cloud…</a>
+      <a class="helpBtn" href="http://www.dolphin-browser.com/help/extension.html" target='_blank'></a>
+    </footer>
+  </div>
 </body>
 <script src="js/index.js"></script>
 </html>
