@@ -18,14 +18,18 @@ function get_status(panel)
     }
 
     for(var i = 0; i < ts_list.length; ++i){
+	var s = "";
 	try{
 	    var text = h3_list[i].childNodes[2].nodeValue;
 	    var ts = ts_list[i].childNodes[0].nodeValue;
-	
 	    s = ts.replace("\n", "") + text.replace("\n", "");
-	    ret.unshift(s);
 	}catch(err){
-	    
+	    var text = h3_list[i].childNodes[1].nodeValue;
+	    var ts = ts_list[i].childNodes[0].nodeValue;
+	    s = ts.replace("\n", "") + text.replace("\n", "");
+	}
+	if(s != ""){
+	    ret.unshift(s);
 	}
     }
     return ret;
