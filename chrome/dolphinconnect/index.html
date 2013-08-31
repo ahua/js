@@ -3,26 +3,16 @@
   <head>
     <meta charset="UTF-8">
     <title>Dolphin Connect</title>
-    <link rel="stylesheet" type="text/css" href="css/index.css" />
   </head>
-  <body id="login">
-    <div class="loginPage">
-      <div class="leftSide"><span class="leftInstro">Sync all your tabs and bookmarks, push webpages and other information to mobile devices.<div class="middleLine"></div></div>
-      <div class="rightSide">
-	<header class="topArea" id="nav">
-	</header>
-	<section class="switchArea" id="mainAreaOut">
-	  <a class="help" href="http://www.dolphin-browser.com/help/extension.html" target="_blank" id="helpBtn"></a>
-	  <a class="back" href="#"  id="backBtn">Back</a>
-	  <div class="aLoading" id="loadCover"><span class="gif"></span></div>
-	  <div class="mainPage" id="pageHolder"> <!--动态-->
-	    <a class="faceBook" id="facebook">Connect with <b>Facebook</b></a>
-	    <a class="loginBtn" id="google">Connect with <b>Google Account</b></a>
-	    <a class="loginBtn" id="dolphinLogin">Connect with <b>Dolphin Account</b></a>
-	  </div>
-	</section>		
-      </div>
-    </div>
+  <body>
+  <div><span>Account Login</span>
+    <form><input type="username" name="username" id="username"/>
+      <input type="passwd" name="passwd" id="passwd"/>
+      <a id="login">Login</a>
+    </form>
+  </div>
   </body>
+  <script src="jquery/jquery-1.7.2.js"></script>
   <script src="js/index.js"></script>
 </html>
+

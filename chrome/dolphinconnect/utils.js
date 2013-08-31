@@ -1,62 +1,3 @@
-/*Google Analytics API*/
-var _gaq = _gaq || [];
-_gaq.push(['_setAccount', 'UA-35178856-1']);
-//_gaq.push(['_trackPageview']);
-
-(function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = 'https://ssl.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-})();
-
-
-/* ba */
-function setBelugaCode(user_id) {
-    (function() {
-	var ba = document.createElement('script'); ba.type = 'text/javascript';
-	ba.src = chrome.extension.getURL('ba.js');
-	var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ba, s);
-    })();
-    
-    setTimeout(function(){
-	var appinfo ={"app_key":"cf54c60ae3ed48b09a090498b07b580e","version":"0.1","chn":"chrome","uid":user_id, "target":"http://en.belugaboost.com"};
-	_ba.setAppInfo(appinfo);	
-    }, 1000);
-}
-
-function track_event(config, opt)
-{
-    var category = config.category;
-    var action = config.action;
-    var label = config.label;
-    var value = config.value;
-    
-    try {
-	if(opt == null) {
-	    _gaq.push(['_trackEvent', 'chrome_en', action, label, value]);
-	    if(_ba) {
-		_ba.track('chrome_en', action, label, value);		
-		if(action=='TabSync') {
-		    _ba.track('sync', 'tabs', '', value);
-		}
-		else if(action =='BookmarkSync') {
-		    _ba.track('sync', 'bookmarks', '', value);
-		}						
-	    }
-	}
-	else 
-	{	
-	    if(_ba) {
-		_ba.track(category, action, label, value);		
-	    }			
-	}
-    }
-    catch(e) {
-	console.log(e);
-    }
-}
-
-
 function getQueryStringRegExp(url,name)
 {
     var reg = new RegExp("(^|\\?|&)"+ name +"=([^&]*)(\\s|&|$)", "i");
@@ -67,35 +8,24 @@ function getQueryStringRegExp(url,name)
     	url_decode = url_decode.substring(0,location_hash);
     }
      
-    if (reg.test(url_decode))
-	{
-		return unescape(RegExp.$2.replace(/\+/g, " ")); 
-	}
-	else
-	{
-		return "";
-	}
-};
+    if (reg.test(url_decode)){
+	return unescape(RegExp.$2.replace(/\+/g, " ")); 
+    }
+    else{
+	return "";
+    }
+}
 
-
-function urlencode(params)
-{
-    if(typeof params == 'object')
-    {
+function urlencode(params){
+    if(typeof params == 'object'){
 	var elements = new Array();
-	
-	for(var param in params)
-	{
-	    if (typeof params[param] == 'object')
-	    {
+	for(var param in params){
+	    if (typeof params[param] == 'object'){
 		elements.push(param+"="+encodeURIComponent(JSON.stringify(params[param])));
-	    }
-	    else
-	    {
+	    } else {
 		elements.push(param+"="+encodeURIComponent(params[param]));
 	    }
 	}
-	
 	return elements.join('&');		
     }
     else {
@@ -104,10 +34,10 @@ function urlencode(params)
 }
 
 
-function sendRequest(method, url, headers, body, callback, data,timeout_callback) {
+function sendRequest(method, url, headers, body,
+		     callback, data, timeout_callback) {
     var xhr = new XMLHttpRequest();
-    if(callback != null)
-    {
+    if(callback != null){
 	xhr.onreadystatechange = function() {
 	    callback(xhr,data);
 	}
@@ -126,7 +56,7 @@ function sendRequest(method, url, headers, body, callback, data,timeout_callback
     }
     
     if(timeout_callback) {
-  	xhr.timeout = 15*1000;
+  	xhr.timeout = 15 * 1000;
   	xhr.ontimeout = timeout_callback;
     }
     
@@ -134,49 +64,20 @@ function sendRequest(method, url, headers, body, callback, data,timeout_callback
     return xhr;
 }
 
-
-function showNotification(title,message)
-{
-}
-
-function createNotification(title,message)
-{
-    var notification = webkitNotifications.createNotification(
-	'images/normal.png',
-	title,
-	message
-    );
-    
-    notification.ondisplay = function(event) {
-    	setTimeout(function() {
-            event.currentTarget.cancel();
-        }, 
-        	   3*1000);
-    }
-    
-    notification.show();	
-}
-
-
 function get_clientid(flag)
 {
     var _uuid = localStorage['DolphinBrowserClientId'];
-    if(_uuid == null)
-    {
+    if(_uuid == null){
 	_uuid = uuid();
 	localStorage['DolphinBrowserClientId'] = _uuid;
     }
     
-    if(flag)
-    {
+    if(flag){
 	return _uuid + ":" + CommInfo.user_name;
-    }
-    else
-    {
+    }else{
 	return _uuid;
     }
 }
-
 
 function gen_devicename()
 {	
@@ -193,7 +94,7 @@ function gen_devicename()
 	}
     }
     
-    var dev_prefix = ['Silver','Yellow', 'Gold', 'Red', 'Green', 'Blue', 'Purple', 'White', 'Black', 'Brown'];
+    var dev_prefix = ['Silver','Yellow', 'Gold', 'Red', 'White', 'Black', 'Brown'];
     var buildin_dev_name = {};
     for(var idx in dev_prefix)
     {
@@ -204,8 +105,7 @@ function gen_devicename()
     var all_dev = CommInfo.device_list;
     if(all_dev == null || all_dev.length == 0){
 	name = ''+name;
-    }
-    else{
+    } else {
 	for(var id in all_dev) {
 	    if(buildin_dev_name.hasOwnProperty(all_dev[id].deviceName)){
 		delete buildin_dev_name[all_dev[id].deviceName];
@@ -215,8 +115,7 @@ function gen_devicename()
 	var i=0;
 	if(buildin_dev_name.hasOwnProperty(name)) {
 	    name = name;
-	}
-	else {
+	} else {
 	    for(i=0;i < dev_prefix.length; i++){
 		if(buildin_dev_name.hasOwnProperty(dev_prefix[i]+" "+name)){
 		    name=dev_prefix[i]+" "+name;
@@ -233,8 +132,7 @@ function get_devicename() {
     var dev_name = localStorage['DolphinBrowserDevName'];
     if(dev_name == null || dev_name == '') {
 	return  '';
-    }
-    else {
+    } else {
 	dev_name = JSON.parse(dev_name);
 	if(dev_name[CommInfo.user_name] == null) {
 	    return '';			
@@ -249,8 +147,7 @@ function save_devicename(name) {
     var dev_name = localStorage['DolphinBrowserDevName'];
     if(!dev_name || dev_name.length == 0) {
 	dev_name = {};
-    }
-    else{
+    } else {
 	dev_name = JSON.parse(dev_name);
     }	
     
@@ -264,10 +161,8 @@ function get_os_type()
     var agt = window.navigator.userAgent.toLowerCase(); 
     var name = 'PC';
     
-    for(var dev in devices)
-    {
-	if(agt.indexOf(dev) != -1)
-	{
+    for(var dev in devices){
+	if(agt.indexOf(dev) != -1){
 	    return devices[dev];
 	}
     }
@@ -372,18 +267,6 @@ function openAlltabs()
 	chrome.tabs.create({url:push_tabs[tab].url});
     }	
 }
-
-
-function set_sync_ico()
-{
-}
-
-
-function set_normal_ico()
-{
-}
-
-
 
 
 function focusWindow(id)

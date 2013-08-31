@@ -147,12 +147,6 @@ function get_open_tabs()
 	if(change) {
 	    print_msg("tab sync changed and start local tab sync[1]");
 	    tabs_sync.last_tabs = current_tabs;
-	    track_event({
-		category:'general',
-		action:'TabSync',
-		label:'trigger',
-		value:1
-	    });				
 	    local_tab_sync();
 	}
 	else {
@@ -186,10 +180,5 @@ function sync_control()
     if(setting_json.tab)
     {
 	tab_sync_once();
-    }
-    
-    if(setting_json.bookmark)
-    {
-	BookmarkSyncCtrl.sync();
     }
 }

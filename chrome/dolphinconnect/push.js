@@ -13,9 +13,6 @@ function push_init() {
     if (setting.tab) {
         subscribe.push('tab');
     }
-    if (setting.bookmark) {
-        subscribe.push('bookmark');
-    }
 
     pusher = new Pusher({
         userinfo: {
@@ -37,7 +34,6 @@ function push_init() {
             device_remove: device_remove_handler,
             sync_setting: tabs_sync.setting,
             tab_sync: tab_sync_once,
-            bookmark_sync: BookmarkSyncCtrl.sync,
             logout: logout_clear
         },
         subscribe: subscribe
@@ -45,9 +41,6 @@ function push_init() {
     pusher.login();
 }
 
-/*
- *  For main panel reconnect.
- */
 function pushReConnect() {
     var time_current = get_utc() / 1000;
     if ((time_current - lastReConnectTime) > 10) {
@@ -68,22 +61,16 @@ function changeSyncListener(setting) {
     }
 }
 
-/*
-	When receive remove push device message, remove the device from current device list.
-*/
 function device_remove_handler(device_id) {
     var client_id = get_clientid(true);
     var devices = CommInfo.device_list;
-
+    
     if (device_id != client_id) {
-        //delete push devices.
         for (var idx in devices) {
             if (devices[idx].did == device_id) {
-                //delete from device list
                 devices.splice(idx, 1);
                 remove_menu(device_id);
 
-                //delete tabs
                 var tabs = CommInfo.tab_sync_list();
                 for (var i in tabs) {
                     if (device_id.indexOf(tabs[i].dev_id) != -1) {
@@ -93,13 +80,11 @@ function device_remove_handler(device_id) {
                     }
                 }
 
-                //delete shortcut
                 var sc = CommInfo.get_device_shortcut();
                 delete sc[device_id];
                 CommInfo.save_device_shortcut(sc);
 
                 if (CommInfo.popup_id != null) {
-                    //UI display
                     var device_list = CommInfo.device_list;
                     CommInfo.popup_id.reflashPage(device_list, CommInfo.get_device_shortcut(), 'push');
                     var tab_sync_list = CommInfo.tab_sync_list_sorted();
@@ -109,17 +94,13 @@ function device_remove_handler(device_id) {
             }
         }
 
-        //reflresh userinfo page if exits.
         refresh_userinfo_page();
     } else {
-        //suicide.
         logout_clear();
     }
 }
 
-/*
-	Check push connect status, if connect failed, try again later, otherwise stop check.
-*/
+
 function retry() {
     if (pusher == null) {
         return;
@@ -151,37 +132,20 @@ function push_close() {
     }
 }
 
-//push success, then display success on popup page.
 
 function push_success_handler() {
-    //push_result_handler(target_device,'ok');
 }
 
-//push failed, then display failed on popup page.
 
 function push_failed_handler() {
-    //push_result_handler(target_device,'failed');
 }
 
-/*
-	data Format:
-	{
-		id:'f2578628-e092-4e1c-a472-5330a0dce63d',
-		data:{
-			title:'Baidu',
-			url:'http://www.baidu.com'
-		}
-	}
-*/
 
-//push interface to display module.
 function pushSend(device, display_callback) {
-    //push(device,null,true,1);
     chrome.tabs.query({
         highlighted: true,
         windowId: chrome.windows.WINDOW_ID_CURRENT
     }, function(tabs) {
-        //print_msg(tabs[0].url);	
         push(device, {
             title: tabs[0].title,
             url: tabs[0].url
@@ -189,13 +153,7 @@ function pushSend(device, display_callback) {
     });
 }
 
-/*
- 	Rename device interface.
- 	params:
- 		- device_id:
- 		- name:
- 		- type
- */
+
 function dev_rename(device_id, name, type) {
     if (device_id == null) {
         device_id = get_clientid(true);
@@ -206,7 +164,6 @@ function dev_rename(device_id, name, type) {
     }
 
     if (pusher != null && pusher.isConnect()) {
-        //save in localstorage.
         save_devicename(name);
         pusher.rename(device_id, name, type);
     } else {
@@ -275,12 +232,6 @@ function push(id, msg, flag, type, subtype) {
             push_data: msg
         }));
 
-        track_event({
-            category: 'push',
-            action: 'PC',
-            label: dev_t,
-            value: 1
-        }, true);
 
         switch (type) {
             case 1:
@@ -288,32 +239,13 @@ function push(id, msg, flag, type, subtype) {
                     chrome.tabs.executeScript(null, {
                         code: INJECT_CODE.SEND_DIRECTION
                     });
-                    track_event({
-                        category: 'Push to action',
-                        action: 'Push',
-                        label: msg.title,
-                        value: 1
-                    });
                 } else if (subtype != null && subtype == 1) {
                     chrome.tabs.executeScript(null, {
                         code: INJECT_CODE.SEND_APP
                     });
-                    track_event({
-                        category: 'Push to action',
-                        action: 'Push',
-                        label: 'app',
-                        value: 1
-                    });
                 } else {
                     chrome.tabs.executeScript(null, {
                         code: INJECT_CODE.SEND_PAGE
-                    });
-
-                    track_event({
-                        category: 'Push to action',
-                        action: 'Push',
-                        label: 'tab',
-                        value: 1
                     });
                 }
                 break;
@@ -321,23 +253,13 @@ function push(id, msg, flag, type, subtype) {
                 chrome.tabs.executeScript(null, {
                     code: INJECT_CODE.SEND_IMAGE
                 });
-                track_event({
-                    category: 'Push to action',
-                    action: 'Push',
-                    label: 'image',
-                    value: 1
-                });
+
                 break;
             case 3:
                 chrome.tabs.executeScript(null, {
                     code: INJECT_CODE.SEND_TEXT
                 });
-                track_event({
-                    category: 'Push to action',
-                    action: 'Push',
-                    label: 'text',
-                    value: 1
-                });
+
                 break;
 
             default:
@@ -408,12 +330,6 @@ function receive_old(msg) {
         });
     }
 
-    track_event({
-        category: 'Push to action',
-        action: 'stable',
-        label: 'recnum',
-        value: len
-    });
 
     if (len > 1) {
         createNotification("Pages Received", "You have received " + len + " pages from other devices.");
@@ -431,7 +347,6 @@ function receive_old(msg) {
 */
 function receive_new(msg) {
     var m = msg;
-    //create a new tab display the webpage identified by msg.url
 
     chrome.windows.getAll({
         populate: true
@@ -467,19 +382,8 @@ function receive_new(msg) {
             });
         }
     });
-
-    track_event({
-        category: 'Push to action',
-        action: 'stable',
-        label: 'recnum',
-        value: 1
-    });
 }
 
-/*
- 	msg format:
- 	
- */
 function dev_rename_handler(dev_id, info) {
     //TODO
     var client_id = get_clientid(true);
@@ -645,45 +549,12 @@ function set_default_shortcuts(devs) {
         sc[devs[0].did] = ['Shift', 'Ctrl', 'X'];
     }
 
-    /*	
-	if(len == 0) {
-		if(devs.length == 1) {
-			sc[devs[0].did] = ['Shift', 'X'];
-		}
-		else if(devs.length >= 2){
-			sc[devs[0].did] = ['Shift', 'X'];
-			sc[devs[1].did] = ['Shift', 'Ctrl', 'X'];
-		}
-	}
-
-	else if(len == 1) {
-		if(devs.length >= 2) {
-			//check shortcuts conflict
-			if(sc[devs[0].did] && sc[devs[0].did].length == 2) {
-				sc[devs[1].did] = ['Shift', 'Ctrl', 'X'];
-			}
-			else if(sc[devs[0].did]) {
-				sc[devs[1].did] = ['Shift', 'X'];
-			}
-		}
-	}
-	*/
     CommInfo.save_device_shortcut(sc);
 }
 
-/*
-	after all other module is loading, this function will be called.
-*/
 check_login_status();
 
 
-/*
- 	Params:
- 		-message:
- 			{
- 				type: one of "dev_data", "map", "itunes_app"
- 			}
- */
 chrome.extension.onMessage.addListener(function(message, sender, sendResponse) {
 
     var type = message.type;
@@ -755,12 +626,6 @@ chrome.extension.onMessage.addListener(function(message, sender, sendResponse) {
                 if (match) {
                     print_msg("match" + idx);
                     pushSend(idx);
-                    track_event({
-                        category: 'other',
-                        action: 'shortcutspush',
-                        label: 'shortcutspush',
-                        value: 1
-                    });
                     break;
                 }
             }
