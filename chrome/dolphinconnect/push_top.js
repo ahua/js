@@ -348,14 +348,10 @@ function Pusher(hickey) {
             type: 'post',
             data: urlencode(informData),
 
-            //call back function, get the old data
             success: function(message) {
                 if (message.status == 0) {
-                    //do logic for message
                     var pushData = [];
                     for (key in message.data) {
-                        //pushData.push(jQuery.base64.decode(message.data[key]));
-                        //if data is null, error may occur, so, we need filter null object out.
                         if (message.data[key] != null) {
                             pushData.push(message.data[key]);
                         }
@@ -379,6 +375,7 @@ function Pusher(hickey) {
             "device_info": hickey.userinfo.device_info
         };
         var msg_encode = urlencode(_auth_token);
+	console.log(listURL());
         jQuery.ajax({
             url: listURL(),
             type: 'post',
@@ -386,13 +383,14 @@ function Pusher(hickey) {
 
             //call back function, get the old data
             success: function(message, status) {
+		console.log(message);
                 print_msg("[3][Push] getDeviceList has response...");
                 if (status == 'success' && message.status == 0) {
                     print_msg("[4][Push]getDeviceList success ...");
                     _connect_num = 1;
                     var device_state = message.data.device_state;
                     if (device_state == 0) {
-
+			
                         hickey.handler.sync_setting(message.data.tab_sync_commit_delay * 1000);
                         _deviceList = message.data.device_list;
                         if (message.data.ext != null) {

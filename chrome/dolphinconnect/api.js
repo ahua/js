@@ -82,20 +82,12 @@ function CALLBACK_validate_token(xhr)
 	{
 	    CommInfo.user_id  = resp.data.user_id;
 	    save_user_login_info();
-	    setBelugaCode(CommInfo.user_id);
 	}
     }	
 }
 
 function API_sync_state()
 {
-    track_event({
-	category:'general',
-	action:'TabSync',
-	label:'trigger',
-	value:1
-    });		
-    
     var method = "POST";
     var url = API.sync_state();
     var headers={"Content-Type":"application/json","ClientVersion":"chromeExtv1.0"};

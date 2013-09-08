@@ -7,10 +7,6 @@ var tmp_user_name;
 var tmp_password;
 var dolphin_xhr = null;
 
-function thirdParty_login(type, win)
-{
-
-}
 
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
     if(CommInfo.auth_tab_id != 'undefined' && 
@@ -46,7 +42,6 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
 	    }
 			
 	    CommInfo.is_login = true;
-	    //close login window
 	    try {
 		chrome.tabs.remove(tabId);			
 	    }
@@ -54,7 +49,6 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
 		print_msg(e.message);
 	    }
 	    
-	    //get_user_info();
 	    if (CommInfo.nick_name == null || CommInfo.nick_name == '') {
 		CommInfo.nick_name = CommInfo.email;
 	    }
